@@ -16,13 +16,13 @@ on :connect do
   join "#cprb"
 end
 
-on :channel, /^tweet @(\w+)/ do |user|
+on :channel, /^:tweet @(\w+)/ do |user|
   info = twitter_client.users.show.json? :screen_name => user
   msg channel, "Tweet: #{user}: #{info.status.text}"
 end
 
-on :channel, /^quote (\w+)\^(\d+)/ do |user, offset|
-  quote = Message.find(:last, :conditions => {:nick => user}, :offset => offset)
+on :channel, /^:quote (\w+)\^?(\d*)/ do |user, offset|
+  quote = Message.find(:last, :conditions => {:nick => user}, :offset => offset || 0)
   if quote
     quote.update_attributes(:preserve => true)
     msg channel, "#{nick}: The operation was a success."
@@ -31,7 +31,7 @@ on :channel, /^quote (\w+)\^(\d+)/ do |user, offset|
   end
 end
 
-on :channel, /^random (\w+)/ do |user|
+on :channel, /^:random (\w+)/ do |user|
   quote = Message.find(:first, :conditions => {:nick => user, :preserve => true}, :order => 'random()')
   if quote
     msg channel, "#{nick}: <#{quote.nick}> #{quote.message}"
