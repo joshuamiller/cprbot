@@ -40,6 +40,10 @@ on :channel, /^:random (\w+)/ do |user|
   end
 end
 
+on :channel, /^:h(a|e)lp/ do
+  msg channel, "#{nick}: :tweet @username | :quote nick^n | :random nick"
+end
+
 on :channel do
   Message.create(:channel => channel, :nick => nick, :message => message)
 end
