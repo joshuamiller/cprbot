@@ -16,8 +16,8 @@ on :connect do
   join "#cprb"
 end
 
-on :channel, /^:tweet @(\w+)/ do |user|
-  info = twitter_client.users.show.json? :screen_name => user
+on :channel, /^:tweet @(\w+)\^?(\d*)/ do |user, offset|
+  info = twitter_client.statuses.user_timeline.json? :screen_name => user, :count => 1, :page => (offset || 1)
   msg channel, "Tweet: #{user}: #{info.status.text}"
 end
 
@@ -40,8 +40,31 @@ on :channel, /^:random (\w+)/ do |user|
   end
 end
 
+on :channel, /^:fml\^?(\d*)/ do |offset|
+  offset ||= 1
+  rss = SimpleRSS.parse open('http://feeds.feedburner.com/fmylife')
+  entry = begin 
+    rss.entries[0].content.split("FML")[0]
+  rescue
+    "FML AM BROKE"
+  end
+  msg channel, "#{nick}: #{entry} FML."
+end
+
+on :channel, /^:tfln\^?(\d*)/ do |offset|
+  offset ||= 1
+  rss = SimpleRSS.parse open('http://feeds.feedburner.com/tfln')
+  entry = begin 
+    rss.entries[0].description.split("\r\n")[0]
+  rescue
+    "TFLN AM BROKE"
+  end
+  msg channel, "#{nick}: #{entry}"
+end
+
+
 on :channel, /^:h(a|e)lp/ do
-  msg channel, "#{nick}: :tweet @username | :quote nick^n | :random nick"
+  msg channel, "#{nick}: :tweet @username^n | :quote nick^n | :random nick"
 end
 
 on :channel do
