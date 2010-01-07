@@ -3,6 +3,10 @@ require 'rubygems'
 require 'grackle'
 twitter_client = Grackle::Client.new(:auth=>{:type=>:basic,:username=>'centralparuby',:password=>'nope'})
 
+require 'simple-rss'
+require 'open-uri'
+require 'nokogiri'
+
 require 'models/message'
 
 require 'isaac'
@@ -62,6 +66,20 @@ on :channel, /^:tfln\^?(\d*)/ do |offset|
   msg channel, "#{nick}: #{entry}"
 end
 
+on :channel, /^:weather (.*)/ do |location|
+  result = begin
+    nok = Nokogiri::XML(open("http://api.wunderground.com/auto/wui/geo/GeoLookupXML/index.xml?query=#{location}"))
+    station = nok.search('//station/icao').first.text
+    nok = Nokogiri::XML(open("http://api.wunderground.com/auto/wui/geo/WXCurrentObXML/index.xml?query=#{station}"))
+    weather = nok.search('//weather').first.text
+    temp = nok.search('//temperature_string').first.text
+    location_string = nok.search('//observation_location/full').first.text
+    "#{nick}: Weather for #{location_string} (#{station}): #{weather}, #{temp}"
+  rescue
+    "#{nick}: Couldn't find weather for #{location}"
+  end
+  msg channel, result
+end
 
 on :channel, /^:h(a|e)lp/ do
   msg channel, "#{nick}: :tweet @username^n | :quote nick^n | :random nick"
