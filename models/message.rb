@@ -4,7 +4,7 @@ require 'activesupport'
 
 ActiveRecord::Base.establish_connection(
   :adapter => 'sqlite3',
-  :database =>  'db/cprbot.sqlite3.db'
+  :database => File.join(File.dirname(__FILE__), '..', 'db', 'cprbot.sqlite3.db')
 )
 
 class Message < ActiveRecord::Base
