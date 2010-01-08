@@ -82,6 +82,10 @@ on :channel, /^:weather (.*)/ do |location|
   msg channel, result
 end
 
+on :channel, /^:larry/ do
+  msg channel, "#{nick}: OMG that is AMAZING!!"
+end
+
 on :channel, /^:h(a|e)lp/ do
   msg channel, "#{nick}: :tweet @username^n | :quote nick^n | :random nick"
 end
