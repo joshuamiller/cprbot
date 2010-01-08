@@ -22,8 +22,12 @@ on :connect do
 end
 
 on :channel, /^:tw(eet|itter) @?(\w+)\^?(\d*)/ do |user, offset|
-  info = twitter_client.statuses.user_timeline.json? :screen_name => user, :count => 1, :page => (offset || 1)
-  msg channel, "Tweet: #{user}: #{info.first.try(:text)}"
+  begin
+    info = twitter_client.statuses.user_timeline.json? :screen_name => user, :count => 1, :page => (offset || 1)
+    msg channel, "Tweet: #{user}: #{info.first.try(:text)}"
+  rescue
+    msg channel, "Fail whale. Sorry."
+  end
 end
 
 on :channel, /^:quote (\w+)\^?(\d*)/ do |user, offset|
