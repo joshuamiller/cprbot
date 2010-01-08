@@ -27,7 +27,7 @@ on :channel, /^:tw(eet|itter) @?(\w+)\^?(\d*)/ do |user, offset|
 end
 
 on :channel, /^:quote (\w+)\^?(\d*)/ do |user, offset|
-  quote = Message.find(:last, :conditions => {:nick => user}, :offset => offset || 0)
+  quote = Message.find(:last, :conditions => {:nick => user}, :offset => (offset - 1) || 0)
   if quote
     quote.update_attributes(:preserve => true)
     msg channel, "#{nick}: The operation was a success."
@@ -92,7 +92,7 @@ on :channel, /^:slaney/ do
 end  
 
 on :channel, /^:h(a|e)lp/ do
-  msg channel, "#{nick}: :tweet @username^n | :quote nick^n | :random nick"
+  msg channel, "#{nick}: :tweet @username^n | :quote nick^n | :random nick | :tfln^n | :fml^n | :weather zip"
 end
 
 on :channel do
