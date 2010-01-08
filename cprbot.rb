@@ -46,7 +46,7 @@ on :channel, /^:random (\w+)/ do |user|
 end
 
 on :channel, /^:fml\^?(\d*)/ do |offset|
-  offset ||= 1
+  offset = offset.try(:to_i) || 1
   rss = SimpleRSS.parse open('http://feeds.feedburner.com/fmylife')
   entry = begin 
     rss.entries[offset-1].content.split("FML")[0]
@@ -57,7 +57,7 @@ on :channel, /^:fml\^?(\d*)/ do |offset|
 end
 
 on :channel, /^:tfln\^?(\d*)/ do |offset|
-  offset ||= 1
+  offset = offset.try(:to_i) || 1
   rss = SimpleRSS.parse open('http://feeds.feedburner.com/tfln')
   entry = begin 
     rss.entries[offset-1].description.split("\r\n")[0]
