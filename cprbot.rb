@@ -1,4 +1,5 @@
 require 'rubygems'
+require 'active_support'
 
 require 'grackle'
 twitter_client = Grackle::Client.new(:auth=>{:type=>:basic,:username=>'centralparuby',:password=>'nope'})
@@ -22,7 +23,7 @@ end
 
 on :channel, /^:tweet @(\w+)\^?(\d*)/ do |user, offset|
   info = twitter_client.statuses.user_timeline.json? :screen_name => user, :count => 1, :page => (offset || 1)
-  msg channel, "Tweet: #{user}: #{info.first.text}"
+  msg channel, "Tweet: #{user}: #{info.first.try(:text)}"
 end
 
 on :channel, /^:quote (\w+)\^?(\d*)/ do |user, offset|
