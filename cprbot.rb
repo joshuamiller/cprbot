@@ -22,7 +22,7 @@ end
 
 on :channel, /^:tweet @(\w+)\^?(\d*)/ do |user, offset|
   info = twitter_client.statuses.user_timeline.json? :screen_name => user, :count => 1, :page => (offset || 1)
-  msg channel, "Tweet: #{user}: #{info.status.text}"
+  msg channel, "Tweet: #{user}: #{info.first.text}"
 end
 
 on :channel, /^:quote (\w+)\^?(\d*)/ do |user, offset|
