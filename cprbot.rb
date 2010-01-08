@@ -86,6 +86,11 @@ on :channel, /^:larry/ do
   msg channel, "#{nick}: OMG that is AMAZING!!"
 end
 
+on :channel, /^:slaney/ do
+  msg channel, "#{nick}: Not big enough"
+  msg channel, " "
+end  
+
 on :channel, /^:h(a|e)lp/ do
   msg channel, "#{nick}: :tweet @username^n | :quote nick^n | :random nick"
 end
