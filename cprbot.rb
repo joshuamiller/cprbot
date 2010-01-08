@@ -49,7 +49,7 @@ on :channel, /^:fml\^?(\d*)/ do |offset|
   offset ||= 1
   rss = SimpleRSS.parse open('http://feeds.feedburner.com/fmylife')
   entry = begin 
-    rss.entries[0].content.split("FML")[offset-1]
+    rss.entries[offset-1].content.split("FML")[0]
   rescue
     "FML AM BROKE"
   end
@@ -60,7 +60,7 @@ on :channel, /^:tfln\^?(\d*)/ do |offset|
   offset ||= 1
   rss = SimpleRSS.parse open('http://feeds.feedburner.com/tfln')
   entry = begin 
-    rss.entries[0].description.split("\r\n")[offset-1]
+    rss.entries[offset-1].description.split("\r\n")[0]
   rescue
     "TFLN AM BROKE"
   end
