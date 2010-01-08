@@ -60,7 +60,7 @@ on :channel, /^:tfln\^?(\d*)/ do |offset|
   offset ||= 1
   rss = SimpleRSS.parse open('http://feeds.feedburner.com/tfln')
   entry = begin 
-    rss.entries[0].description.split("\r\n")[0]
+    rss.entries[0].description.split("\r\n")[offset-1]
   rescue
     "TFLN AM BROKE"
   end
