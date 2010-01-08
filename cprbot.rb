@@ -8,7 +8,7 @@ require 'simple-rss'
 require 'open-uri'
 require 'nokogiri'
 
-require 'models/message'
+require File.join(File.dirname(__FILE__), 'models', 'message')
 
 require 'isaac'
 configure do |c|
