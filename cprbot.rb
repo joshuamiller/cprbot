@@ -49,7 +49,7 @@ on :channel, /^:fml\^?(\d*)/ do |offset|
   offset ||= 1
   rss = SimpleRSS.parse open('http://feeds.feedburner.com/fmylife')
   entry = begin 
-    rss.entries[0].content.split("FML")[0]
+    rss.entries[0].content.split("FML")[offset-1]
   rescue
     "FML AM BROKE"
   end
