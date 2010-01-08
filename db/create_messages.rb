@@ -3,7 +3,7 @@ require 'activerecord'
 
 ActiveRecord::Base.establish_connection(
   :adapter => 'sqlite3',
-  :database =>  '../db/cprbot.sqlite3.db'
+  :database =>  File.join(File.dirname(__FILE__) + 'cprbot.sqlite3.db')
 )
 
 class CreateMessages < ActiveRecord::Migration
