@@ -7,6 +7,7 @@ twitter_client = Grackle::Client.new(:auth=>{:type=>:basic,:username=>'centralpa
 require 'simple-rss'
 require 'open-uri'
 require 'nokogiri'
+require 'whois'
 
 require File.join(File.dirname(__FILE__), 'models', 'message')
 
@@ -137,6 +138,15 @@ on :channel, /^:weather (.*)/ do |location|
   msg channel, result
 end
 
+on :channel, /^:whois\s+(.*)/ do |domain|
+  result = begin
+    w = Whois::Client.new
+  rescue
+    "Whois not working right now."
+  end
+  msg channel, w.query(domain)
+end
+
 on :channel, /^:larry/ do
   msg channel, "#{nick}: OMG that is AMAZING!!"
 end
@@ -147,7 +157,7 @@ on :channel, /^:slaney/ do
 end  
 
 on :channel, /^:h(a|e)lp/ do
-  msg channel, "#{nick}: :tweet @username^n | :quote nick^n | :random nick | :tfln^n | :fml^n | :weather zip"
+  msg channel, "#{nick}: :tweet @username^n | :quote nick^n | :random nick | :tfln^n | :fml^n | :weather zip | :whois domain"
 end
 
 on :channel do
