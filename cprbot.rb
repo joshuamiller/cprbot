@@ -31,7 +31,8 @@ on :channel, /^:tw(eet|itter) @?(\w+)\^?(\d*)/ do |_, user, offset|
 end
 
 on :channel, /^:quote (\w+)\^?(\d*)/ do |user, offset|
-  quote = Message.find(:last, :conditions => {:nick => user}, :offset => (offset - 1) || 0)
+  offset = offset.try(:to_i) || 1
+  quote = Message.find(:last, :conditions => {:nick => user}, :offset => (offset - 1))
   if quote
     quote.update_attributes(:preserve => true)
     msg channel, "#{nick}: The operation was a success."
