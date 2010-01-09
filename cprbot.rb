@@ -21,6 +21,40 @@ on :connect do
   join "#cprb"
 end
 
+on :channel, /^:dns\s+(.*)/ do |host|
+    response = "I don't know that one"
+  begin
+    response = Socket::getaddrinfo(host, "echo", Socket::AF_INET, Socket::SOCK_DGRAM)[0][3]
+  rescue 
+    response = "DNS lookup shit the bed!"
+  end
+    msg channel, "#{nick}: #{response}"
+end
+
+on :channel, /^:dice\s+(\d*)d(\d*)/ do |dice, sides|
+  begin
+    dice = dice.to_i
+    sides = sides.to_i
+    response = 0
+    if dice > 6
+      response = "#{nick}: You can't roll more than 6 dice"
+    elsif sides > 100
+      response = "#{nick}: You can't have more that 100 sides.  Asshole."
+    else
+      (1..dice).each do
+        roll = rand(sides + 1)
+        if roll == 0
+          roll = 1
+        end
+        response = response + roll
+      end
+    end
+    msg channel, "#{nick}: #{response}"
+  rescue
+    msg channel, "Something is not quite right with this bot"
+  end
+end
+
 on :channel, /^:tw(eet|itter) @?(\w+)\^?(\d*)/ do |_, user, offset|
   begin
     info = twitter_client.statuses.user_timeline.json? :screen_name => user, :count => 1, :page => (offset || 1)
