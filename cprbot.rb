@@ -61,6 +61,22 @@ on :channel, /^:fml\^?(\d*)/ do |offset|
   msg channel, "#{nick}: #{entry} FML."
 end
 
+on :channel, /^:ifml\^?(\d*)/ do |fmlid|
+  begin
+  entry = "Fuck _your_ life. FYL"
+  rss = SimpleRSS.parse open('http://feeds.feedburner.com/fmylife')
+    rss.entries.each do |fml|
+      if fml[:id].split("/")[4] == "#{fmlid}"
+        entry = "#{fml[:content].split("FML")[0]} FML"
+        break
+      end
+    end
+  rescue
+    "FML AM BROKE"
+  end
+  msg channel, "#{nick}: #{entry}"
+end
+
 on :channel, /^:tfln\^?(\d*)/ do |offset|
   offset = offset.try(:to_i) || 1
   rss = SimpleRSS.parse open('http://feeds.feedburner.com/tfln')
