@@ -72,7 +72,7 @@ on :channel, /^:ifml\^?(\d*)/ do |fmlid|
       end
     end
   rescue
-    "FML AM BROKE"
+    entry = "FML AM BROKE"
   end
   msg channel, "#{nick}: #{entry}"
 end
