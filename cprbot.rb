@@ -87,6 +87,19 @@ on :channel, /^:weather (.*)/ do |location|
   msg channel, result
 end
 
+on :channel, /^:lastfm (.*)^?(\d*)/ do |user, offset|
+  offset = offset.try(:to_i) || 1
+  result = begin
+    rss = SimpleRSS.parse open("http://ws.audioscrobbler.com/2.0/user/#{user}/recenttracks.rss")
+    track = rss.entries[(offset - 1)].title
+    time = rss.entries[(offset - 1)].pubDate.strftime("%m/%d/%y %H:%M")
+    "#{nick}: #{user} listened to #{track} at #{time}"
+  rescue
+    "#{nick}: last.fm broke, sorry."
+  end
+  msg channel, result
+end
+
 on :channel, /^:larry/ do
   msg channel, "#{nick}: OMG that is AMAZING!!"
 end
