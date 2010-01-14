@@ -160,6 +160,10 @@ on :channel, /^:h(a|e)lp/ do
   msg channel, "#{nick}: :tweet @username^n | :quote nick^n | :random nick | :tfln^n | :fml^n | :weather zip | :whois domain"
 end
 
+on :channel, /^:purpose/ do
+  msg channel, "Bringing people back to life since 2010."
+end
+
 on :channel do
   Message.create(:channel => channel, :nick => nick, :message => message)
 end
