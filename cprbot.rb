@@ -157,7 +157,7 @@ on :channel, /^:slaney/ do
 end  
 
 on :channel, /^:h(a|e)lp/ do
-  msg channel, "#{nick}: :tweet @username^n | :quote nick^n | :random nick | :tfln^n | :fml^n | :weather zip | :whois domain"
+  msg channel, "#{nick}: :tweet @username^n | :quote nick^n | :random nick | :tfln^n | :fml^n | :weather zip | :whois domain | :purpose"
 end
 
 on :channel, /^:purpose/ do
