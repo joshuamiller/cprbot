@@ -137,6 +137,20 @@ on :channel, /^:weather (.*)/ do |location|
   msg channel, result
 end
 
+# FIXME: open-uri.rb:277:in `open_http': 400 Malformed API Call (OpenURI::HTTPError)
+# on :channel, /^:lastfm (.*)^?(\d*)/ do |fmuser, offset|
+#   offset = offset.try(:to_i) || 1
+#   result = begin
+#     rss = SimpleRSS.parse open("http://ws.audioscrobbler.com/2.0/user/#{fmuser}/recenttracks.rss")
+#     track = rss.entries[(offset - 1)].title
+#     time = rss.entries[(offset - 1)].pubDate.strftime("%m/%d/%y %H:%M")
+#     "#{nick}: #{fmuser} listened to #{track} at #{time}"
+#   rescue
+#     "#{nick}: last.fm broke, sorry."
+#   end
+#   msg channel, result
+# end
+
 on :channel, /^:larry/ do
   msg channel, "#{nick}: OMG that is AMAZING!!"
 end
@@ -148,6 +162,15 @@ end
 
 on :channel, /^:h(a|e)lp/ do
   msg channel, "#{nick}: :tweet @username^n | :quote nick^n | :random nick | :tfln^n | :fml^n | :weather zip"
+end
+
+on :channel, /^:t/ do
+  new_topic = Message.find(:first, :conditions => {:preserve => true}, :order => 'random()')
+  if new_topic
+    topic channel, "<#{new_topic.nick}> #{new_topic.message}"
+  else
+    msg channel, "#{nick}: Sorry, I can't come up with a topic."
+  end
 end
 
 on :channel do
