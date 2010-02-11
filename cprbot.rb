@@ -178,6 +178,15 @@ on :channel, /^:purpose/ do
   msg channel, "Bringing people back to life since 2010."
 end
 
+on :channel, /^:t/ do
+  new_topic = Message.find(:first, :conditions => {:preserve => true}, :order => 'random()')
+  if new_topic
+    topic channel, "<#{new_topic.nick}> #{new_topic.message}"
+  else
+    msg channel, "#{nick}: Sorry, I can't come up with a topic."
+  end
+end
+
 on :channel do
   Message.create(:channel => channel, :nick => nick, :message => message)
 end
