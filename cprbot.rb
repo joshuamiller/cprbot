@@ -7,6 +7,7 @@ twitter_client = Grackle::Client.new(:auth=>{:type=>:basic,:username=>'centralpa
 require 'simple-rss'
 require 'open-uri'
 require 'nokogiri'
+require 'whois'
 
 require File.join(File.dirname(__FILE__), 'models', 'message')
 
@@ -137,6 +138,15 @@ on :channel, /^:weather (.*)/ do |location|
   msg channel, result
 end
 
+on :channel, /^:whois\s+(.*)/ do |domain|
+  result = begin
+    w = Whois::Client.new
+  rescue
+    "Whois not working right now."
+  end
+  msg channel, w.query(domain)
+end
+
 # FIXME: open-uri.rb:277:in `open_http': 400 Malformed API Call (OpenURI::HTTPError)
 # on :channel, /^:lastfm (.*)^?(\d*)/ do |fmuser, offset|
 #   offset = offset.try(:to_i) || 1
@@ -161,7 +171,20 @@ on :channel, /^:slaney/ do
 end  
 
 on :channel, /^:h(a|e)lp/ do
-  msg channel, "#{nick}: :tweet @username^n | :quote nick^n | :random nick | :tfln^n | :fml^n | :weather zip"
+  msg channel, "#{nick}: :tweet @username^n | :quote nick^n | :random nick | :tfln^n | :fml^n | :weather zip | :whois domain | :purpose"
+end
+
+on :channel, /^:purpose/ do
+  msg channel, "Bringing people back to life since 2010."
+end
+
+on :channel, /^:t/ do
+  new_topic = Message.find(:first, :conditions => {:preserve => true}, :order => 'random()')
+  if new_topic
+    topic channel, "<#{new_topic.nick}> #{new_topic.message}"
+  else
+    msg channel, "#{nick}: Sorry, I can't come up with a topic."
+  end
 end
 
 on :channel, /^:t/ do
