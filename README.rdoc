@@ -1,0 +1,9 @@
+= Welcome to CPRBot
+
+== This is the README
+
+Every project needs a README. So I made one.
+
+== About this project
+
+This is an IRC bot. For CPRB. Hence the clever title, CPRBot. The B in CPRB makes up the B in bot. See what they did there?
