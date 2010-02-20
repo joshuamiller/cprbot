@@ -22,7 +22,10 @@ on :connect do
 end
 
 on :channel, /^:twss\^?(\d*)/ do |twssid|
-    entry = "No idea dude."
+  if twssid.to_s == ""
+    msg channel, "#{nick}: No idea dude."
+    return
+  end
   begin
     entry = Nokogiri::XML(open("http://thatswh.at/item/" + twssid.to_s  + "/")).search('//p[@class = "text"]').text
   rescue
