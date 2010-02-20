@@ -7,6 +7,8 @@ twitter_client = Grackle::Client.new(:auth=>{:type=>:basic,:username=>'centralpa
 require 'simple-rss'
 require 'open-uri'
 require 'nokogiri'
+require 'hpricot'
+require 'sanitize'
 require 'whois'
 
 require File.join(File.dirname(__FILE__), 'models', 'message')
@@ -20,6 +22,20 @@ end
 
 on :connect do
   join "#cprb"
+end
+
+on :channel, /^:twss\^?(\d*)/ do |twssid|
+  entry = "No idea dude."
+  begin
+    if twssid.to_s == ""
+      entry = Hpricot(open("http://thatswh.at/")).search('//p[@class = "text"]').first.inner_html
+    else
+      entry = Hpricot(open("http://thatswh.at/item/" + twssid.to_s  + "/")).search('//p[@class = "text"]').first.inner_html
+    end
+  rescue
+    entry = "THATSWH.AT AM BROKE"
+  end
+  msg channel, "#{nick}: #{Sanitize.clean(entry)}"
 end
 
 on :channel, /^:dns\s+(.*)/ do |host|
