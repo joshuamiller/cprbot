@@ -21,6 +21,16 @@ on :connect do
   join "#cprb"
 end
 
+on :channel, /^:twss\^?(\d*)/ do |twssid|
+    entry = "No idea dude."
+  begin
+    entry = Nokogiri::XML(open("http://thatswh.at/item/" + twssid.to_s  + "/")).search('//p[@class = "text"]').text
+  rescue
+    entry = "THATSWH.AT AM BROKE"
+  end
+  msg channel, "#{nick}: #{entry}"
+end
+
 on :channel, /^:dns\s+(.*)/ do |host|
     response = "I don't know that one"
   begin
