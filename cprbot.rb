@@ -28,9 +28,9 @@ on :channel, /^:twss\^?(\d*)/ do |twssid|
   entry = "No idea dude."
   begin
     if twssid.to_s == ""
-      entry = Hpricot(open("http://thatswh.at/")).search('//p[@class = "text"]').inner_html
+      entry = Hpricot(open("http://thatswh.at/")).search('//p[@class = "text"]').first.inner_html
     else
-      entry = Hpricot(open("http://thatswh.at/item/" + twssid.to_s  + "/")).search('//p[@class = "text"]').inner_html
+      entry = Hpricot(open("http://thatswh.at/item/" + twssid.to_s  + "/")).search('//p[@class = "text"]').first.inner_html
     end
   rescue
     entry = "THATSWH.AT AM BROKE"
