@@ -24,6 +24,16 @@ on :connect do
   join "#cprb"
 end
 
+on :channel, /^:shady\s+(.*)/ do |url|
+  entry = "I can't shady that shit man"
+  begin
+    entry = Hpricot(open("http://shadyurl.com/create.php?myUrl=" + url)).search('//div#output/a')[1].attributes['href']
+  rescue
+    entry = "SHADYURL AM BROKE"
+  end
+  msg channel, "#{nick}: #{entry}"
+end
+
 on :channel, /^:twss\^?(\d*)/ do |twssid|
   entry = "No idea dude."
   begin
