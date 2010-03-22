@@ -6,9 +6,9 @@ twitter_client = Grackle::Client.new(:auth=>{:type=>:basic,:username=>'centralpa
 
 require 'simple-rss'
 require 'open-uri'
-require 'nokogiri'
 require 'hpricot'
 require 'sanitize'
+require 'nokogiri'
 require 'whois'
 
 require File.join(File.dirname(__FILE__), 'models', 'message')
