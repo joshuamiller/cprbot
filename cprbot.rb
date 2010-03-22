@@ -213,6 +213,11 @@ on :channel, /^:t/ do
   end
 end
 
+on :channel, /^:dicks/ do
+  balls,shaft,head = "8","=","D"
+  msg channel, "#{balls}#{shaft * (rand(10)+1)}#{head}"
+end
+
 on :channel do
   Message.create(:channel => channel, :nick => nick, :message => message)
 end
