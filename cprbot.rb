@@ -218,6 +218,11 @@ on :channel, /^:dicks/ do
   msg channel, "#{balls}#{shaft * (rand(10)+1)}#{head}"
 end
 
+on :channel, /^:boobs/ do
+  boobs = ['(.)(.)', '( o )( o )', '( @ Y @ )']
+  msg channel, boobs.rand
+end
+
 on :channel do
   Message.create(:channel => channel, :nick => nick, :message => message)
 end
