@@ -2,7 +2,7 @@ require 'rubygems'
 require 'active_support'
 
 require 'grackle'
-twitter_client = Grackle::Client.new(:auth=>{:type=>:basic,:username=>'centralparuby',:password=>'nope'})
+twitter_client = Grackle::Client.new(:auth=>{:type=>:basic,:username=>'sendmehome',:password=>'Tmdgaf1'})
 
 require 'simple-rss'
 require 'open-uri'
@@ -197,7 +197,9 @@ end
 # end
 
 on :channel, /^:larry/ do
-  msg channel, "#{nick}: OMG that is AMAZING!!"
+  raw "/nick larry_"
+  msg channel, "omg that's freaking awesome"
+  raw "/nick CPRBot"
 end
 
 on :channel, /^:slaney/ do
