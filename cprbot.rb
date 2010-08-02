@@ -85,7 +85,9 @@ end
 on :channel, /^:tw(eet|itter) @?(\w+)\^?(\d*) (\w+)\^?(\d*)/ do |_, user, offset, requestor|
   begin
     info = twitter_client.statuses.user_timeline.json? :screen_name => user, :count => 1, :page => (offset || 1)
-    msg channel, "#{requestor}: Tweet: #{user}: #{info.first.try(:text)}"
+    info.first.try(:text).split("\n").each do |tweet_line|
+      msg channel, "#{requestor}: Tweet: #{user}: #{tweet_line}"
+    end
   rescue
     msg channel, "Fail whale. Sorry."
   end
@@ -94,7 +96,9 @@ end
 on :channel, /^:tw(eet|itter) @?(\w+)\^?(\d*)/ do |_, user, offset|
   begin
     info = twitter_client.statuses.user_timeline.json? :screen_name => user, :count => 1, :page => (offset || 1)
-    msg channel, "Tweet: #{user}: #{info.first.try(:text)}"
+    info.first.try(:text).split("\n").each do |tweet_line|
+      msg channel, "Tweet: #{user}: #{tweet_line}"
+    end
   rescue
     msg channel, "Fail whale. Sorry."
   end
