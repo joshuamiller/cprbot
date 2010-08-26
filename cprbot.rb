@@ -200,6 +200,10 @@ end
 #   msg channel, result
 # end
 
+on :channel, /^:date/ do
+  msg channel, "#{nick}: " + Time.new.strftime('%a %b %d %H:%M:%S %Z %Y')
+end
+
 on :channel, /^:larry/ do
   raw "/nick larry_"
   msg channel, "omg that's freaking awesome"
