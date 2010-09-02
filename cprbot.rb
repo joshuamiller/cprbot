@@ -2,7 +2,7 @@ require 'rubygems'
 require 'active_support'
 
 require 'grackle'
-twitter_client = Grackle::Client.new(:auth=>{:type=>:basic,:username=>'sendmehome',:password=>'Tmdgaf1'})
+twitter_client = Grackle::Client.new
 
 require 'simple-rss'
 require 'open-uri'
