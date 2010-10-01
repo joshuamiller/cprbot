@@ -82,6 +82,17 @@ on :channel, /^:dice\s+(\d*)d(\d*)/ do |dice, sides|
   end
 end
 
+on :channel, /&:tw(eet|itter) \#(\w+)\^?(\d*)/ do |_, hash_tag, offset|
+  begin
+    info = twitter_client[:search].search.json?(:q => "##{hash_tag}").results[offset - 1]
+    info.text.split('\n').each do |tweet_line|
+      msg channel, "Tweet: #{info.from_user}: #{tweet_line}"
+    end
+  rescue
+    msg channel, "Fail whale. Sorry."
+  end
+end
+
 on :channel, /^:tw(eet|itter) @?(\w+)\^?(\d*) (\w+)\^?(\d*)/ do |_, user, offset, requestor|
   begin
     info = twitter_client.statuses.user_timeline.json? :screen_name => user, :count => 1, :page => (offset || 1)
