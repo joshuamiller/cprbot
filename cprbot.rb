@@ -82,8 +82,10 @@ on :channel, /^:dice\s+(\d*)d(\d*)/ do |dice, sides|
   end
 end
 
-on :channel, /&:tw(eet|itter) \#(\w+)\^?(\d*)/ do |_, hash_tag, offset|
+on :channel, /^:tw(eet|itter) #(\w+)\^?(\d*)/ do |_, hash_tag, offset|
   begin
+    offset ||= 1
+    offset = offset.to_i
     info = twitter_client[:search].search.json?(:q => "##{hash_tag}").results[offset - 1]
     info.text.split('\n').each do |tweet_line|
       msg channel, "Tweet: #{info.from_user}: #{tweet_line}"
