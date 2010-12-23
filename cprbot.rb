@@ -2,7 +2,7 @@ require 'rubygems'
 require 'active_support'
 
 require 'grackle'
-twitter_client = Grackle::Client.new(:auth=>{:type=>:basic,:username=>'centralparuby',:password=>'nope'})
+twitter_client = Grackle::Client.new
 
 require 'simple-rss'
 require 'open-uri'
@@ -79,6 +79,19 @@ on :channel, /^:dice\s+(\d*)d(\d*)/ do |dice, sides|
     msg channel, "#{nick}: #{response}"
   rescue
     msg channel, "Something is not quite right with this bot"
+  end
+end
+
+on :channel, /^:tw(eet|itter) #(\w+)\^?(\d*)/ do |_, hash_tag, offset|
+  begin
+    offset ||= 1
+    offset = offset.to_i
+    info = twitter_client[:search].search.json?(:q => "##{hash_tag}").results[offset - 1]
+    info.text.split('\n').each do |tweet_line|
+      msg channel, "Tweet: #{info.from_user}: #{tweet_line}"
+    end
+  rescue
+    msg channel, "Fail whale. Sorry."
   end
 end
 
@@ -205,7 +218,9 @@ on :channel, /^:date/ do
 end
 
 on :channel, /^:larry/ do
-  msg channel, "#{nick}: OMG that is AMAZING!!"
+  raw "/nick larry_"
+  msg channel, "omg that's freaking awesome"
+  raw "/nick CPRBot"
 end
 
 on :channel, /^:slaney/ do
