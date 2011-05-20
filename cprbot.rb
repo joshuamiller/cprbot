@@ -1,5 +1,10 @@
 require 'rubygems'
+require 'i18n'
 require 'active_support'
+require 'active_support/all'
+
+require 'action_view'
+include ActionView::Helpers::DateHelper
 
 require 'grackle'
 twitter_client = Grackle::Client.new
@@ -49,13 +54,24 @@ on :channel, /^:twss\^?(\d*)/ do |twssid|
 end
 
 on :channel, /^:dns\s+(.*)/ do |host|
-    response = "I don't know that one"
+  response = "This doesn't work."
+#  begin
+#    response = Socket::getaddrinfo(host, "echo", Socket::AF_INET, Socket::SOCK_DGRAM)[0][#3]
+#  rescue 
+#    response = "DNS lookup shit the bed!"
+#  end
+  msg channel, "#{nick}: #{response}"
+end
+
+on :channel, /^:lastfm\s+(.*)/ do |username|
+  response = "Sorry, couldn't find that user or most recent track."
   begin
-    response = Socket::getaddrinfo(host, "echo", Socket::AF_INET, Socket::SOCK_DGRAM)[0][3]
-  rescue 
-    response = "DNS lookup shit the bed!"
+    user = Scrobbler::User.new(username)
+    track = user.recent_tracks.first
+    response = "#{ track.artist }: #{ track.name } (#{ time_ago_in_words(track.date) } ago)"
+  rescue
   end
-    msg channel, "#{nick}: #{response}"
+  msg channel, "#{nick}: #{response}"
 end
 
 on :channel, /^:dice\s+(\d*)d(\d*)/ do |dice, sides|
