@@ -15,6 +15,7 @@ require 'hpricot'
 require 'sanitize'
 require 'nokogiri'
 require 'whois'
+require 'cgi'
 
 require File.join(File.dirname(__FILE__), 'models', 'message')
 
@@ -104,7 +105,7 @@ on :channel, /^:tw(eet|itter) #(\w+)\^?(\d*)/ do |_, hash_tag, offset|
     offset = offset.to_i
     info = twitter_client[:search].search.json?(:q => "##{hash_tag}").results[offset - 1]
     info.text.split('\n').each do |tweet_line|
-      msg channel, "Tweet: #{info.from_user}: #{tweet_line}"
+      msg channel, "Tweet: #{info.from_user}: #{CGI.unescapeHTML(tweet_line)}"
     end
   rescue
     msg channel, "Fail whale. Sorry."
@@ -115,7 +116,7 @@ on :channel, /^:tw(eet|itter) @?(\w+)\^?(\d*) (\w+)\^?(\d*)/ do |_, user, offset
   begin
     info = twitter_client.statuses.user_timeline.json? :screen_name => user, :count => 1, :page => (offset || 1)
     info.first.try(:text).split("\n").each do |tweet_line|
-      msg channel, "#{requestor}: Tweet: #{user}: #{tweet_line}"
+      msg channel, "#{requestor}: Tweet: #{user}: #{CGI.unescapeHTML(tweet_line)}"
     end
   rescue
     msg channel, "Fail whale. Sorry."
@@ -126,7 +127,7 @@ on :channel, /^:tw(eet|itter) @?(\w+)\^?(\d*)/ do |_, user, offset|
   begin
     info = twitter_client.statuses.user_timeline.json? :screen_name => user, :count => 1, :page => (offset || 1)
     info.first.try(:text).split("\n").each do |tweet_line|
-      msg channel, "Tweet: #{user}: #{tweet_line}"
+      msg channel, "Tweet: #{user}: #{CGI.unescapeHTML(tweet_line)}"
     end
   rescue
     msg channel, "Fail whale. Sorry."
