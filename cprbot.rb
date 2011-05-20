@@ -1,4 +1,5 @@
 require 'rubygems'
+require 'cgi'
 require 'i18n'
 require 'active_support'
 begin
@@ -73,7 +74,7 @@ on :channel, /^:lastfm\s+(\w*)\^?(\d*)/ do |username, index|
   begin
     user = Scrobbler::User.new(username)
     track = user.recent_tracks[index.to_i + 1]
-    response = "#{ track.artist }: #{ track.name } (#{ time_ago_in_words(Time.at(track.date_uts.to_i)) } ago)"
+    response = "#{ CGI.unescapeHTML(track.artist) }: #{ CGI.unescapeHTML(track.name) } (#{ time_ago_in_words(Time.at(track.date_uts.to_i)) } ago)"
   rescue
   end
   msg channel, "#{nick}: #{response}"
