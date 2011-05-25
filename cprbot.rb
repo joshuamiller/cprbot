@@ -1,5 +1,15 @@
 require 'rubygems'
+require 'cgi'
+require 'i18n'
 require 'active_support'
+begin
+  require 'active_support/all'
+rescue LoadError # Older version of activesupport.  Doesn't actually matter.
+end
+require 'scrobbler'
+
+require 'action_view'
+include ActionView::Helpers::DateHelper
 
 require 'grackle'
 twitter_client = Grackle::Client.new
@@ -50,13 +60,24 @@ on :channel, /^:twss\^?(\d*)/ do |twssid|
 end
 
 on :channel, /^:dns\s+(.*)/ do |host|
-    response = "I don't know that one"
+  response = "This doesn't work."
+#  begin
+#    response = Socket::getaddrinfo(host, "echo", Socket::AF_INET, Socket::SOCK_DGRAM)[0][#3]
+#  rescue 
+#    response = "DNS lookup shit the bed!"
+#  end
+  msg channel, "#{nick}: #{response}"
+end
+
+on :channel, /^:lastfm\s+(\w*)\^?(\d*)/ do |username, index|
+  response = "Sorry, couldn't find that user or most recent track."
   begin
-    response = Socket::getaddrinfo(host, "echo", Socket::AF_INET, Socket::SOCK_DGRAM)[0][3]
-  rescue 
-    response = "DNS lookup shit the bed!"
+    user = Scrobbler::User.new(username)
+    track = user.recent_tracks[index.to_i + 1]
+    response = "#{ CGI.unescapeHTML(track.artist) }: #{ CGI.unescapeHTML(track.name) } (#{ time_ago_in_words(Time.at(track.date_uts.to_i)) } ago)"
+  rescue
   end
-    msg channel, "#{nick}: #{response}"
+  msg channel, "#{nick}: #{response}"
 end
 
 on :channel, /^:dice\s+(\d*)d(\d*)/ do |dice, sides|
@@ -199,20 +220,6 @@ on :channel, /^:whois\s+(.*)/ do |domain|
   end
   msg channel, w.query(domain)
 end
-
-# FIXME: open-uri.rb:277:in `open_http': 400 Malformed API Call (OpenURI::HTTPError)
-# on :channel, /^:lastfm (.*)^?(\d*)/ do |fmuser, offset|
-#   offset = offset.try(:to_i) || 1
-#   result = begin
-#     rss = SimpleRSS.parse open("http://ws.audioscrobbler.com/2.0/user/#{fmuser}/recenttracks.rss")
-#     track = rss.entries[(offset - 1)].title
-#     time = rss.entries[(offset - 1)].pubDate.strftime("%m/%d/%y %H:%M")
-#     "#{nick}: #{fmuser} listened to #{track} at #{time}"
-#   rescue
-#     "#{nick}: last.fm broke, sorry."
-#   end
-#   msg channel, result
-# end
 
 on :channel, /^:date/ do
   msg channel, "#{nick}: " + Time.new.strftime('%a %b %d %H:%M:%S %Z %Y')
