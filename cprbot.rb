@@ -119,7 +119,7 @@ end
 
 on :channel, /^:tw(eet|itter) @?(\w+)\^?(\d*) (\w+)\^?(\d*)/ do |_, user, offset, requestor|
   begin
-    info = twitter_client.statuses.user_timeline.json? :screen_name => user, :count => 1, :page => (offset || 1)
+    info = twitter_client.statuses.user_timeline.json? :screen_name => user, :count => 1, :page => (offset || 1), :include_rts => true
     info.first.try(:text).split("\n").each do |tweet_line|
       msg channel, "#{requestor}: Tweet: #{user}: #{CGI.unescapeHTML(tweet_line)}"
     end
