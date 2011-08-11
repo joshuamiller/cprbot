@@ -265,8 +265,8 @@ on :channel, /^:boobs/ do
   c = [')(', 'Y', 'ϒ', 'Ƴ', 'λ', 'Λ']
   outside = rand(4)
   inside = rand(2) + 1 + outside
-  nipples = random(n)
-  cleavage = random(c)
+  nipples = n[rand(n.size)]
+  cleavage = c[rand(c.size)]
   boobs = '(' + ' '*outside + nipples + ' '*inside + cleavage + ' '*inside + nipples + ' '*outside + ')'
   msg channel, boobs
 end
