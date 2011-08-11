@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'rubygems'
 require 'cgi'
 require 'i18n'
@@ -259,8 +260,15 @@ on :channel, /^:dick/ do
 end
 
 on :channel, /^:boobs/ do
-  boobs = ['(.)(.)', '( o )( o )', '( @ Y @ )']
-  msg channel, boobs.rand
+  # via mjwhitt
+  n = ['.', 'o', '@', '·', '°', '¤']
+  c = [')(', 'Y', 'ϒ', 'Ƴ', 'λ', 'Λ']
+  outside = rand(4)
+  inside = rand(2) + 1 + outside
+  nipples = random(n)
+  cleavage = random(c)
+  boobs = '(' + ' '*outside + nipples + ' '*inside + cleavage + ' '*inside + nipples + ' '*outside + ')'
+  msg channel, boobs
 end
 
 on :channel do
