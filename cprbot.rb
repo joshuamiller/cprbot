@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'rubygems'
 require 'cgi'
 require 'i18n'
@@ -119,7 +120,7 @@ end
 
 on :channel, /^:tw(eet|itter) @?(\w+)\^?(\d*) (\w+)\^?(\d*)/ do |_, user, offset, requestor|
   begin
-    info = twitter_client.statuses.user_timeline.json? :screen_name => user, :count => 1, :page => (offset || 1), :include_rts => 1
+    info = twitter_client.statuses.user_timeline.json? :screen_name => user, :count => 1, :page => (offset || 1), :include_rts => true
     info.first.try(:text).split("\n").each do |tweet_line|
       msg channel, "#{requestor}: Tweet: #{user}: #{CGI.unescapeHTML(tweet_line)}"
     end
@@ -130,7 +131,7 @@ end
 
 on :channel, /^:tw(eet|itter) @?(\w+)\^?(\d*)/ do |_, user, offset|
   begin
-    info = twitter_client.statuses.user_timeline.json? :screen_name => user, :count => 1, :page => (offset || 1), :include_rts => 1
+    info = twitter_client.statuses.user_timeline.json? :screen_name => user, :count => 1, :page => (offset || 1), :include_rts => true
     info.first.try(:text).split("\n").each do |tweet_line|
       msg channel, "Tweet: #{user}: #{CGI.unescapeHTML(tweet_line)}"
     end
@@ -259,8 +260,15 @@ on :channel, /^:dick/ do
 end
 
 on :channel, /^:boobs/ do
-  boobs = ['(.)(.)', '( o )( o )', '( @ Y @ )']
-  msg channel, boobs.rand
+  # via mjwhitt
+  n = ['.', 'o', '@', '·', '°', '¤']
+  c = [')(', 'Y', 'ϒ', 'Ƴ', 'λ', 'Λ']
+  outside = rand(4)
+  inside = rand(2) + 1 + outside
+  nipples = n[rand(n.size)]
+  cleavage = c[rand(c.size)]
+  boobs = '(' + ' '*outside + nipples + ' '*inside + cleavage + ' '*inside + nipples + ' '*outside + ')'
+  msg channel, boobs
 end
 
 on :channel do
