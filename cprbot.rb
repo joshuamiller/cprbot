@@ -238,7 +238,7 @@ on :channel, /^:slaney/ do
 end  
 
 on :channel, /^:h(a|e)lp/ do
-  msg channel, "#{nick}: :tweet @username^n | :quote nick^n | :random nick | :tfln^n | :fml^n | :weather zip | :whois domain | :purpose"
+  msg channel, "#{nick}: :tweet @username^n | :quote nick^n | :random nick | :tfln^n | :fml^n | :weather zip | :whois domain | :purpose | :fight nick1 nick2"
 end
 
 on :channel, /^:purpose/ do
@@ -271,12 +271,12 @@ on :channel, /^:boobs/ do
   msg channel, boobs
 end
 
-on :channel, /^:(fight|fite) (\w+) (\w+)/ do |nick1,nick2|
+on :channel, /^:(fight|fite) (\w+) (\w+)/ do |keyword,nick1,nick2|
 	msg channel, "LET'S GET IT ON"
-	rand1 = (Random.rand(20) + 1).to_s
-	rand2 = (Random.rand(20) + 1).to_s
-	msg channel, nick1 + ": " + rand1
-	msg channel, nick2 + ": " + rand2
+	rand1 = (Random.rand(20) + 1)
+	rand2 = (Random.rand(20) + 1)
+	msg channel, nick1 + ": " + rand1.to_s
+	msg channel, nick2 + ": " + rand2.to_s
 	msg channel, (rand1 >= rand2) ? nick1 + " wins!" : nick2 + " wins!"
 end
 
