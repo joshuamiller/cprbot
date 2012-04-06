@@ -1,6 +1,6 @@
 require 'rubygems'
-require 'activerecord'
-require 'activesupport'
+require 'active_record'
+require 'active_support'
 
 ActiveRecord::Base.establish_connection(
   :adapter => 'sqlite3',
