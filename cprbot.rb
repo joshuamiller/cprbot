@@ -271,7 +271,7 @@ on :channel, /^:boobs/ do
   msg channel, boobs
 end
 
-on :channel /^:(fight|fite) (\w+) (\w+)/ do |nick1,nick2|
+on :channel, /^:(fight|fite) (\w+) (\w+)/ do |nick1,nick2|
 	msg channel, "LET'S GET IT ON"
 	rand1 = (Random.rand(20) + 1).to_s
 	rand2 = (Random.rand(20) + 1).to_s
