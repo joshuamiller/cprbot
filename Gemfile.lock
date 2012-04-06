@@ -1,0 +1,35 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    active_support (3.0.0)
+      activesupport (= 3.0.0)
+    activesupport (3.0.0)
+    grackle (0.1.10)
+      json
+      mime-types
+      oauth
+    hpricot (0.8.6)
+    isaac (0.2.6)
+    json (1.6.6)
+    mime-types (1.18)
+    nokogiri (1.5.2)
+    oauth (0.4.5)
+    sanitize (2.0.3)
+      nokogiri (>= 1.4.4, < 1.6)
+    scrobbler (0.2.3)
+      activesupport (>= 1.4.2)
+      hpricot (>= 0.4.86)
+    simple-rss (1.2.3)
+    whois (2.5.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  active_support (= 3.0.0)
+  grackle
+  isaac
+  sanitize
+  scrobbler
+  simple-rss
+  whois
