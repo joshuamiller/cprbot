@@ -3,17 +3,20 @@ require 'rubygems'
 require 'cgi'
 require 'i18n'
 require 'active_support'
-begin
-  require 'active_support/all'
-rescue LoadError # Older version of activesupport.  Doesn't actually matter.
-end
 require 'scrobbler'
 
 require 'action_view'
 include ActionView::Helpers::DateHelper
 
 require 'grackle'
-twitter_client = Grackle::Client.new
+twitter_client = Grackle::Client.new(
+  :auth => {
+    :type => :oauth,
+    :consumer_key => 'SOMECONSUMERKEYFROMTWITTER',
+    :consumer_secret => 'SOMECONSUMERTOKENFROMTWITTER',
+    :token => 'ACCESSTOKENACQUIREDONUSERSBEHALF',
+    :token_secret => 'SUPERSECRETACCESSTOKENSECRET'
+  })
 
 require 'simple-rss'
 require 'open-uri'
@@ -238,7 +241,7 @@ on :channel, /^:slaney/ do
 end  
 
 on :channel, /^:h(a|e)lp/ do
-  msg channel, "#{nick}: :tweet @username^n | :quote nick^n | :random nick | :tfln^n | :fml^n | :weather zip | :whois domain | :purpose"
+  msg channel, "#{nick}: :tweet @username^n | :quote nick^n | :random nick | :tfln^n | :fml^n | :weather zip | :whois domain | :purpose | :fight nick1 nick2"
 end
 
 on :channel, /^:purpose/ do
@@ -269,6 +272,15 @@ on :channel, /^:boobs/ do
   cleavage = c[rand(c.size)]
   boobs = '(' + ' '*outside + nipples + ' '*inside + cleavage + ' '*inside + nipples + ' '*outside + ')'
   msg channel, boobs
+end
+
+on :channel, /^:(fight|fite) (\w+) (\w+)/ do |keyword,nick1,nick2|
+	msg channel, "LET'S GET IT ON"
+	rand1 = (Random.rand(20) + 1)
+	rand2 = (Random.rand(20) + 1)
+	msg channel, nick1 + ": " + rand1.to_s
+	msg channel, nick2 + ": " + rand2.to_s
+	msg channel, (rand1 >= rand2) ? nick1 + " wins!" : nick2 + " wins!"
 end
 
 on :channel do
