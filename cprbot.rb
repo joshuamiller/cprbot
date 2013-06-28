@@ -3,10 +3,6 @@ require 'rubygems'
 require 'cgi'
 require 'i18n'
 require 'active_support'
-begin
-  require 'active_support/all'
-rescue LoadError # Older version of activesupport.  Doesn't actually matter.
-end
 require 'scrobbler'
 
 require 'action_view'
