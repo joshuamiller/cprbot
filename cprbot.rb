@@ -9,7 +9,14 @@ require 'action_view'
 include ActionView::Helpers::DateHelper
 
 require 'grackle'
-twitter_client = Grackle::Client.new
+twitter_client = Grackle::Client.new(
+  :auth => {
+    :type => :oauth,
+    :consumer_key => 'SOMECONSUMERKEYFROMTWITTER',
+    :consumer_secret => 'SOMECONSUMERTOKENFROMTWITTER',
+    :token => 'ACCESSTOKENACQUIREDONUSERSBEHALF',
+    :token_secret => 'SUPERSECRETACCESSTOKENSECRET'
+  })
 
 require 'simple-rss'
 require 'open-uri'
