@@ -24,7 +24,6 @@ require 'hpricot'
 require 'sanitize'
 require 'nokogiri'
 require 'whois'
-require 'cgi'
 
 require File.join(File.dirname(__FILE__), 'models', 'message')
 
