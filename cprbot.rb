@@ -24,7 +24,6 @@ require 'hpricot'
 require 'sanitize'
 require 'nokogiri'
 require 'whois'
-require 'cgi'
 
 require File.join(File.dirname(__FILE__), 'models', 'message')
 
@@ -284,5 +283,5 @@ on :channel, /^:(fight|fite) (\w+) (\w+)/ do |keyword,nick1,nick2|
 end
 
 on :channel do
-  Message.create(:channel => channel, :nick => nick, :message => message)
+  Message.create(:channel => channel, :nick => nick, :message => message.to_s.encode('UTF-8', {:invalid => :replace, :undef => :replace, :replace => '?'}))
 end
