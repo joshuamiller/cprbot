@@ -154,7 +154,7 @@ on :channel, /^:quote (\w+)\^?(\d*)/ do |user, offset|
 end
 
 on :channel, /^:random (\w+)/ do |user|
-  quote = Message.find(:first, :conditions => {:nick => user, :preserve => true}, :order => 'random()')
+  quote = Message.where(:nick => user, :preserve => true).order('random()').first
   if quote
     msg channel, "#{nick}: <#{quote.nick}> #{quote.message}"
   else
@@ -248,7 +248,7 @@ on :channel, /^:purpose/ do
 end
 
 on :channel, /^:t/ do
-  new_topic = Message.find(:first, :conditions => {:preserve => true}, :order => 'random()')
+  new_topic = Message.where(:preserve => true).order('random()').first
   if new_topic
     topic channel, "<#{new_topic.nick}> #{new_topic.message}"
   else
