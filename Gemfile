@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-gem 'daemons'
 gem 'scrobbler'
 gem 'grackle'
 gem 'simple-rss'
